@@ -86,3 +86,15 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_state_delete(self):
+        state_id = self.state.id
+        storage.delete(self.state)
+        self.state = None
+        storage.save()
+        exist_in_all = False
+        for k in storage.all().keys():
+            if state_id in k:
+                exist_in_all = True
+        self.assertFalse(exist_in_all)
